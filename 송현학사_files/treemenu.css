@@ -1,0 +1,35 @@
+ul.checktree, ul.checktree ul {
+ list-style-type: none;
+ padding: 0;
+ margin: 0;
+ font: 10pt sans-serif;
+}
+
+ul.checktree li {
+ font-family: 'Noto Sans KR', sans-serif !important;
+ background: url("../images/node.gif") no-repeat;
+ margin: 0;
+ padding: 0 0 0 16px;
+ cursor: pointer;
+ font-weight: normal;
+}
+ul.checktree li.last {
+ background-image: url("../images/node-last.gif");
+}
+ul.checktree li.plus {
+ background-image: url("../images/plus.gif");
+}
+ul.checktree li.plus-last {
+ background-image: url("../images/plus-last.gif");
+}
+ul.checktree li.minus {
+ background-image: url("../images/minus.gif");
+}
+ul.checktree li.minus-last {
+ background-image: url("../images/minus-last.gif");
+}
+
+ul.checktree span.count {
+ text-indent: 5pt;
+ color: #999;
+}
