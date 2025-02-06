@@ -1,0 +1,135 @@
+/* 리로 디자인시스템 */
+
+const rds = {
+    select: () => {
+        console.log('select')
+    },
+    alert: (message, okCallback) => {
+        rds.showPopup(message, okCallback);
+    },
+    confirm: (message, okCallback, cancelCallback) => {
+        $('.rd_layer_alert .btn_alert_cancel').show();
+        rds.showPopup(message, okCallback, cancelCallback);
+    },
+    showPopup: (message, okCallback, cancelCallback) => {
+        $('.rd_layer_alert .alert_text').text(message);
+        $(':focus').blur()
+        $('.rd_layer_alert').show();
+        setTimeout(function () {
+            $('.rd_layer_alert .btn_alert_confirm').focus();
+        }, 0)
+        rds.setPopupCallbacks(okCallback, cancelCallback);
+    },
+    setPopupCallbacks: (okCallback, cancelCallback) => {
+        window.okCallback = okCallback;
+        window.cancelCallback = cancelCallback;
+    },
+    popup: () => { //공통 alert,confirm 레이어 팝업
+
+        function showPopupClose() {
+            $('.rd_layer_alert .alert_text').text('');
+            $('.rd_layer_alert .btn_alert_cancel').hide();
+            $('.rd_layer_alert').hide();
+        }
+
+        $(document).on('click', '.rd_layer_alert .btn_alert_confirm', function () {
+            showPopupClose();
+            if (okCallback) okCallback();
+        });
+
+        $(document).on('click', '.rd_layer_alert .btn_alert_cancel', function () {
+            showPopupClose();
+            if (cancelCallback) cancelCallback();
+        })
+    },
+    tooltip: () => { //속성형 툴팁
+        // 툴팁 요소 선택
+        const tooltip = $('.rd_tooltip');
+
+        //속성형 툴팁 마우스오버
+        $(document).on('mouseover','[data-tooltip]', function (e) {
+            let tooltipText = $(this).data('tooltip');
+            let tooltipTop = 0;
+
+            if($(this).attr('data-vertical') === 'top'){
+                tooltipTop = 35;
+            }
+
+            if($(this).attr('data-stringUse') === 'true'){
+                tooltip.text(tooltipText);
+            }else{
+                tooltip.html(tooltipText);
+            }
+
+            if(tooltipText.length){
+                tooltip.show();
+            }
+
+            $(this).on('mousemove', function (e) {
+                tooltip.css({
+                    top: e.clientY + 20 - tooltipTop,
+                    left: e.clientX + 20
+                });
+            });
+        });
+
+        // 속성형 툴팁 마우스아웃
+        $(document).on('mouseout','[data-tooltip]', function () {
+            tooltip.hide();
+        });
+    },
+    tooltipFunc: (html, className, vertical, stringUse) => { //함수형 툴팁
+        // 툴팁 요소 선택
+        var tooltip = $('.rd_tooltip');
+        let tooltipTop = 0;
+
+        if(vertical === 'top'){
+            tooltipTop = 35;
+        }
+
+        $(className).on('mouseover', function (e) {
+            if(stringUse){
+                tooltip.text(html);
+            }else{
+                tooltip.html(html);
+            }
+            if(html.length){
+                tooltip.show();
+            }
+        });
+
+        $(className).on('mouseout', function () {
+            tooltip.hide();
+        });
+
+        $(className).on('mousemove', function (e) {
+            tooltip.css({
+                top: e.clientY + 20 - tooltipTop,
+                left: e.clientX + 20
+            });
+        });
+
+    },
+    pageMove: () => { //페이지 위아래 이동
+        //페이지 위로 이동
+        $('.rd_move button.up').click(function () {
+            $('html,body').stop().animate({scrollTop: 0}, 300);
+        });
+
+        //페이지 아래로 이동
+        $('.rd_move button.down').click(function () {
+            $('html,body').stop().animate({scrollTop: $(document).height()}, 300);
+        });
+
+    },
+    init: () => {
+        rds.tooltip();
+        rds.popup();
+        rds.pageMove();
+    }
+}
+
+$(function () {
+    rds.init();
+})
+
